@@ -1,0 +1,33 @@
+#!/bin/sh
+###
+# Installing PhantomJS
+cp entrypoint.sh /opt/entrypoint.sh
+apt-get update
+apt-get install -y \
+  software-properties-common
+apt-get update
+apt-get install -y \
+  git \
+  python \
+  bzip2 \
+  libfontconfig
+apt-get clean
+tar -jxvf phantomjs-2.1.1-linux-x86_64.tar.bz2
+mv phantomjs-2.1.1-linux-x86_64 /opt
+ln -sf /opt/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/bin/phantomjs
+###
+# Installing CasperJS
+###
+# Cloning Repo
+git clone git://github.com/casperjs/casperjs.git
+cd casperjs
+git checkout ${CASPERJS_VERSION}
+cd ..
+# Removing history
+rm -rf casperjs/.git
+mv casperjs /opt/
+ln -sf /opt/casperjs/bin/casperjs /usr/local/bin/casperjs
+cd /opt/casperjs
+rm -rf *.gemspec docs rpm samples
+apt-get remove -y \
+  git
